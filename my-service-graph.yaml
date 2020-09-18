@@ -1,0 +1,7 @@
+apiVersion: "service.graph.com/v1"
+kind: ServiceGraph
+metadata:
+  name: my-service-mesh
+spec:
+  image: asdasdasd
+  replicas: 3
