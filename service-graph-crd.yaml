@@ -19,10 +19,45 @@ spec:
         openAPIV3Schema:
           type: object
           properties:
-            spec:
+            specs:
               type: object
               properties:
-                image: 
-                  type: string
-                replicas:
-                  type: integer
+                nodes: 
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name: 
+                        type: string
+                      port:
+                        type: integer
+                      replicas:
+                        type: integer
+                      resources:
+                        type: object
+                        properties:
+                          requests:
+                            type: object
+                            properties:
+                              memory:
+                                type: string
+                              cpu:
+                                type: integer
+                          limits:
+                            type: object
+                            properties:
+                              memory:
+                                type: string
+                              cpu:
+                                type: integer
+                      apiEndpoints:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            path:
+                              type: string
+                            cpuLoad:
+                              type: integer

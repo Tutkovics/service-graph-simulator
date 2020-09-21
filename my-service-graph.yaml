@@ -2,6 +2,22 @@ apiVersion: "service.graph.com/v1"
 kind: ServiceGraph
 metadata:
   name: my-service-mesh
-spec:
-  image: asdasdasd
-  replicas: 3
+specs:
+  nodes:
+    - name: first
+      port: 8000
+      replicas: 3   
+      resources:
+        requests:
+          memory: 64mb
+          cpu: 100
+        limits:
+          memory: 125mb
+          cpu: 200
+      apiEndpoints:
+        - name: index
+          path: /index
+          cpuLoad: 100
+        - name: health
+          path: /health
+          cpuLoad: 200
