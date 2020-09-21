@@ -4,7 +4,7 @@ metadata:
   name: my-service-mesh
 specs:
   nodes:
-    - name: first
+    - name: first-node
       port: 8000
       replicas: 3   
       resources:
@@ -15,9 +15,43 @@ specs:
           memory: 125mb
           cpu: 200
       apiEndpoints:
-        - name: index
-          path: /index
+        - name: default
+          path: /
           cpuLoad: 100
-        - name: health
-          path: /health
+    - name: second-node
+      port: 8000
+      replicas: 1
+      resources:
+        requests:
+          memory: 64mb
+          cpu: 100
+        limits:
+          memory: 125mb
+          cpu: 200
+      apiEndpoints:
+        - name: read
+          path: /api/read
+          cpuLoad: 100
+        - name: database
+          path: /api/db
+          cpuLoad: 50
+        - name: write
+          path: /api/write
           cpuLoad: 200
+  edges:
+    - name: frontend-to-backend-read
+      multiplicator: 2
+      from:
+        name: first-node
+        apiEndpoint: default
+      to:
+        name: second-node
+        apiEndpoint: read
+    - name: frontend-to-backend-write
+      multiplicator: 1
+      from:
+        name: first-node
+        apiEndpoint: default
+      to:
+        name: second-node
+        apiEndpoint: write

@@ -61,3 +61,26 @@ spec:
                               type: string
                             cpuLoad:
                               type: integer
+                edges: 
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name: 
+                        type: string
+                      multiplicator:
+                        type: integer
+                      from:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          apiEndpoint:
+                            type: string 
+                      to:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          apiEndpoint:
+                            type: string 
