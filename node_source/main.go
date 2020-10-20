@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/octago/sflags/gen/gflag"
@@ -96,6 +97,22 @@ func main() {
 					fmt.Fprintf(w, "<li>Delay time: %d</li>\n", cfg.EndpointsDelay[k])
 					fmt.Fprintf(w, "<li>Call out: %s</li>\n", cfg.EndpointsCall[k])
 					//fmt.Fprintf(w, "\t(%s)\n", strings.Split(cfg.EndpointsCall[k], ";"))
+					if cfg.EndpointsCall[k] != "pass" {
+						fmt.Fprintf(w, "<ul>")
+						for i, callOut := range strings.Split(cfg.EndpointsCall[k], "__") {
+							fmt.Printf("[CALL_OUT]\t#no%d --> %s\n", i, callOut)
+							url := "http://" + callOut
+							resp, err := http.Get(url)
+
+							if err != nil {
+								fmt.Fprintf(w, "<li>%d: <b>%s</b>: Oops, something went wrong</li>\n", i, callOut)
+							} else {
+								fmt.Fprintf(w, "<li>%d: <b>%s</b>: %s</li>\n", i, callOut, resp.Status)
+							}
+
+						}
+						fmt.Fprintf(w, "</ul>")
+					}
 					fmt.Fprintln(w, "</ul>")
 
 					fmt.Fprintln(w, "<h3>Info</h3><ul>")
