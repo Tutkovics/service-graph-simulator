@@ -11,3 +11,8 @@ servicegraph.service.graph.com/my-service-mesh created
 
 $ kubectl get servicegraphs [-o json]
 ```
+
+## Latest yaml to deploy
+```
+sample-graphs.yaml
+```
