@@ -11,7 +11,7 @@ import (
 	"github.com/octago/sflags/gen/gflag"
 )
 
-// example: read-args.go -name Frontend -delay 9 -port 9090 -cpu 90 -memory 900 -endpoint-url /read -endpoint-cpu 99 -endpoint-delay 98 -endpoint-url /index -endpoint-cpu 22 -endpoint-delay 202
+// example: main.go -name Frontend -delay 9 -port 9090 -cpu 90 -memory 900 -endpoint-url /read -endpoint-cpu 99 -endpoint-delay 98 -endpoint-url /index -endpoint-cpu 22 -endpoint-delay 202
 type config struct {
 	Name           string   `flag:"name a" desc:"Server/service name"`
 	InitDelay      uint     `flag:"delay" desc:"Delay after start up [ms]"`
@@ -84,7 +84,9 @@ func main() {
 		// fmt.Printf("%d --> %s --> %d\n", i, endpoint, cfg.EndpointsCPU[i])
 		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
 			start := time.Now()
+			//foundEndpoint := false
 			//fmt.Fprintf(w, "Req: %s --> %s\n", r.URL, r.URL.Path)
+
 			for k, endp := range cfg.Endpoints {
 				if endp == r.URL.Path {
 					time.Sleep(time.Duration(cfg.EndpointsDelay[k]) * time.Millisecond)
@@ -122,11 +124,20 @@ func main() {
 					fmt.Fprintf(w, "<li>RemoteAddr: %s</li>\n", r.RemoteAddr)
 					fmt.Fprintf(w, "<li>Host: %s</li>\n", r.Host)
 					fmt.Fprintln(w, "</ul>")
+
+					//foundEndpoint = true //set falg if the requested endpoint was found
 				}
 
 			}
 
-			fmt.Fprintf(w, "Response time: %s", time.Now().Sub(start))
+			//fmt.Fprintf(w, "<h1>/</h1>\n")
+			//body, _ := json.MarshalIndent(cfg, "", "    ")
+			//fmt.Fprintf(w, "<pre><code>Configuration: %s</pre></code>\n", string(body))
+
+			//if foundEndpoint == false {ű
+
+			// send response time
+			fmt.Fprintf(w, "\nResponse time: %s\n", time.Now().Sub(start))
 		})
 	}
 

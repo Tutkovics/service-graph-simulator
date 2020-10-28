@@ -1,4 +1,4 @@
-apiVersion: "service.graph.com/v1"
+apiVersion: "onlab.my.domain/v1"
 kind: ServiceGraph
 metadata:
   name: my-service-mesh
@@ -7,7 +7,7 @@ specs:
     - name: front-end
       port: 80
       nodePort: 30001
-      replicas: 1   
+      replicas: 1
       resources:
         requests:
           memory: 64mb
@@ -15,26 +15,10 @@ specs:
         limits:
           memory: 125mb
           cpu: 200
-      apiEndpoints:
-        - name: instant
-          path: /instant
-          cpuLoad: 100
-          delay: 10
-          callOut: "pass"
-        - name: chain
-          path: /chain
-          cpuLoad: 200
-          delay: 20
-          callOut: "back-end:80/profile"
-        - name: iterate
-          path: /iterate
-          cpuLoad: 300
-          delay: 30
-          callOut: "back-end:80/profile__monitor:80/index"
 
     - name: back-end
       port: 80
-      replicas: 3   
+      replicas: 3
       resources:
         requests:
           memory: 64mb
@@ -42,21 +26,10 @@ specs:
         limits:
           memory: 125mb
           cpu: 200
-      apiEndpoints:
-        - name: profile
-          path: /profile
-          cpuLoad: 100
-          delay: 10
-          callOut: "db:80/get"
-        - name: create
-          path: /create
-          cpuLoad: 200
-          delay: 20
-          callOut: "db:80/set"
 
     - name: db
       port: 80
-      replicas: 1   
+      replicas: 1
       resources:
         requests:
           memory: 64mb
@@ -64,21 +37,10 @@ specs:
         limits:
           memory: 125mb
           cpu: 200
-      apiEndpoints:
-        - name: get
-          path: /get
-          cpuLoad: 100
-          delay: 10
-          callOut: "pass"
-        - name: set
-          path: /set
-          cpuLoad: 200
-          delay: 20
-          callOut: "pass"
 
     - name: monitor
       port: 80
-      replicas: 1   
+      replicas: 1
       resources:
         requests:
           memory: 64mb
@@ -86,9 +48,58 @@ specs:
         limits:
           memory: 125mb
           cpu: 200
-      apiEndpoints:
-        - name: index
-          path: /index
-          cpuLoad: 100
-          delay: 10
-          callOut: "pass"
+
+  endpoints:
+    - nodeName: monitor
+      name: index
+      path: /index
+      cpuLoad: 100
+      delay: 10
+      callOut: "pass"
+
+    - nodeName: db
+      name: get
+      path: /get
+      cpuLoad: 100
+      delay: 10
+      callOut: "pass"
+       
+    - nodeName: db
+      name: set
+      path: /set
+      cpuLoad: 200
+      delay: 20
+      callOut: "pass"
+
+    - nodeName: back-end
+      name: profile
+      path: /profile
+      cpuLoad: 100
+      delay: 10
+      callOut: "db:80/get"
+      
+    - nodeName: back-end
+      name: create
+      path: /create
+      cpuLoad: 200
+      delay: 20
+      callOut: "db:80/set"
+
+    - nodeName: front-end
+      name: instant
+      path: /instant
+      cpuLoad: 100
+      delay: 10
+      callOut: "pass"
+    - nodeName: front-end
+      name: chain
+      path: /chain
+      cpuLoad: 200
+      delay: 20
+      callOut: "back-end:80/profile"
+    - nodeName: front-end
+      name: iterate
+      path: /iterate
+      cpuLoad: 300
+      delay: 30
+      callOut: "back-end:80/profile__monitor:80/index"
