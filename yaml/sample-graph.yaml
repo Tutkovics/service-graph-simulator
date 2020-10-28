@@ -2,7 +2,9 @@ apiVersion: "onlab.my.domain/v1"
 kind: ServiceGraph
 metadata:
   name: my-service-mesh
+  namespace: onlab
 specs:
+  random: 12
   nodes:
     - name: front-end
       port: 80

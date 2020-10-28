@@ -53,7 +53,8 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	_ = r.Get(ctx, req.NamespacedName, servicegraph)
 	fmt.Printf("\n[REQUEST]\t%+v\n", req)
 	fmt.Printf("\n[NODES]\t%+v\n", (servicegraph.ObjectMeta.Annotations))
-	fmt.Printf("\n[SPEC-----------------]\nNodes: %+v\n", servicegraph.ObjectMeta.Annotations["kubectl.kubernetes.io/last-applied-configuration"]["specs"])
+	fmt.Printf("\n[SPEC-----------------]\nType: %T --- %+v\n", servicegraph, servicegraph)
+	//fmt.Printf("\n[SPEC-----------------]\nType: %T\n", servicegraph.ObjectMeta.Annotations["kubectl.kubernetes.io/last-applied-configuration"]) //.["specs"].["endpoints"])
 
 	for node := range servicegraph.Spec.Nodes {
 		deployment := &appsv1.Deployment{}
@@ -83,6 +84,7 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	return ctrl.Result{}, nil
 }
 
+// Random comment
 func (r *ServiceGraphReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&onlabv1.ServiceGraph{}).

@@ -20,53 +20,74 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 //Random comment
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type endpoint struct {
-	NodeName     string `json:"nodename,omitempty"`
+	// Random Comment
+	NodeName string `json:"nodename,omitempty"`
+	// Random Comment
 	EndpointName string `json:"name,omitempty"`
+	// Random Comment
 	EndpointPath string `json:"path,omitempty"`
-	CPU          string `json:"cpuload,omitempty"`
-	Delay        uint   `json:"delay,omitempty"`
-	CallOut      string `json:"callout,omitempty"`
+	// Random Comment
+	CPU string `json:"cpuload,omitempty"`
+	// Random Comment
+	Delay uint `json:"delay,omitempty"`
+	// Random Comment
+	CallOut string `json:"callout,omitempty"`
 }
 
 // ServiceGraphSpec defines the desired state of ServiceGraph
+// +k8s:openapi-gen=true
 type ServiceGraphSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 
 	// Array for nodes in service-graph
+	// +listType=atomic
 	Nodes []*node `json:"nodes,omitempty"`
 
+	Random int `json:"random"`
+
 	// API endpoints for each node
+	// +listType=atomic
 	APIEndpoints []*endpoint `json:"apiendpoints,omitempty"`
 }
 
 // MemcachedStatus defines the observed state of Memcached
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type node struct {
-	Name          string   `json:"name,omitempty"`
-	ContainerPort uint     `json:"containerport,omitempty"`
-	NodePort      uint     `json:"nodeport,omitempty"`
-	Replicas      uint     `json:"replicas,omitempty"`
-	Resources     resource `json:"resources,omitempty"`
+	// Random Comment
+	Name string `json:"name,omitempty"`
+	// Random Comment
+	ContainerPort uint `json:"containerport,omitempty"`
+	// Random Comment
+	NodePort uint `json:"nodeport,omitempty"`
+	// Random Comment
+	Replicas uint `json:"replicas,omitempty"`
+	// Random Comment
+	Resources resource `json:"resources,omitempty"`
 	//APIEndpoints  *[]endpoint `json:"apiendpoints,omitempty"` Nem működött, ha ide volt beágyazva
 	// api/v1/zz_generated.deepcopy.go:96:10: (*in).DeepCopyInto undefined (type *node has no field or method DeepCopyInto)
 
 }
 
 // MemcachedStatus defines the observed state of Memcached
+// +k8s:openapi-gen=true
 type resource struct {
+	// Random Comment
 	Requests memcpu `json:"requests,omitempty"`
-	Limits   memcpu `json:"limit,omitempty"`
+	// Random Comment
+	Limits memcpu `json:"limit,omitempty"`
 }
 
 //Random comment
+// +k8s:openapi-gen=true
 type memcpu struct {
+	// Random Comment
 	Memory string `json:"memory,omitempty"`
-	CPU    string `json:"cpu,omitempty"`
+	// Random Comment
+	CPU string `json:"cpu,omitempty"`
 }
 
 // ServiceGraphStatus defines the observed state of ServiceGraph
@@ -76,10 +97,13 @@ type ServiceGraphStatus struct {
 	//Nodes []node `json:"node"`
 }
 
-// +kubebuilder:object:root=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // ServiceGraph is the Schema for the servicegraphs API
+// +k8s:openapi-gen=true
+// +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:resource:path=servicegraph,scope=Cluster
 type ServiceGraph struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -88,7 +112,7 @@ type ServiceGraph struct {
 	Status ServiceGraphStatus `json:"status,omitempty"`
 }
 
-// +kubebuilder:object:root=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // ServiceGraphList contains a list of ServiceGraph
 type ServiceGraphList struct {

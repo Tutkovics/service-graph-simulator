@@ -6,13 +6,13 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.3.0
   creationTimestamp: null
-  name: servicegraphs.onlab.my.domain
+  name: servicegraph.onlab.my.domain
 spec:
   group: onlab.my.domain
   names:
     kind: ServiceGraph
     listKind: ServiceGraphList
-    plural: servicegraphs
+    plural: servicegraph
     singular: servicegraph
   scope: Cluster
   subresources:
@@ -61,6 +61,7 @@ spec:
                     type: string
                 type: object
               type: array
+              x-kubernetes-list-type: atomic
             nodes:
               description: Array for nodes in service-graph
               items:
@@ -104,8 +105,11 @@ spec:
                     type: object
                 type: object
               type: array
+              x-kubernetes-list-type: atomic
             random:
               type: integer
+          required:
+          - random
           type: object
         status:
           description: ServiceGraphStatus defines the observed state of ServiceGraph
