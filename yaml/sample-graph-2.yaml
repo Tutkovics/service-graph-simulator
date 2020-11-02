@@ -2,9 +2,12 @@ apiVersion: "onlab.example.com/v1"
 kind: Servicegraph
 metadata:
   name: my-service-mesh
-  # namespace: onlab
+  namespace: onlab
 specs:
-  foo: "12"
+  size: 13
+
+---
+  
   # nodes:
   #   - name: front-end
   #     port: 80

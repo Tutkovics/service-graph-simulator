@@ -1,0 +1,7 @@
+domain: project.msc
+repo: project.msc/m/v2
+resources:
+- group: onlab
+  kind: ServiceGraph
+  version: v2
+version: "2"

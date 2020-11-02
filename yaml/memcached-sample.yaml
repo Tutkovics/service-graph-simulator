@@ -1,0 +1,7 @@
+apiVersion: onlab.example.com/v1
+kind: Memcached
+metadata:
+    name: memcached-sample
+spec:
+    # Add fields here
+    size: 3
