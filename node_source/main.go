@@ -83,9 +83,9 @@ func main() {
 	for _, endpoint := range cfg.Endpoints {
 		// fmt.Printf("%d --> %s --> %d\n", i, endpoint, cfg.EndpointsCPU[i])
 		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
+			fmt.Printf("[REQUEST-INCOME] %s --> %s\n", r.URL, r.URL.Path)
 			start := time.Now()
 			//foundEndpoint := false
-			//fmt.Fprintf(w, "Req: %s --> %s\n", r.URL, r.URL.Path)
 
 			for k, endp := range cfg.Endpoints {
 				if endp == r.URL.Path {
@@ -140,8 +140,8 @@ func main() {
 			fmt.Fprintf(w, "\nResponse time: %s\n", time.Now().Sub(start))
 		})
 	}
-
 	if err := http.ListenAndServe(addr, nil); err != nil {
+
 		log.Fatal(err)
 	}
 }

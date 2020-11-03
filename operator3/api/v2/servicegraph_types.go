@@ -22,14 +22,6 @@ import (
 
 // ServiceGraphSpec defines the desired state of ServiceGraph
 type ServiceGraphSpec struct {
-	// +kubebuilder:validation:Minimum=0
-	// Size is the size of the deployment
-	//Size int32 `json:"size"`
-
-	// kubebuilder:validation:Type=string
-	// Name for the deployment
-	//Name string `json:"name"`
-
 	// +kubebuilder:validation:Required
 	// Nodes contain the configs to service
 	Nodes []*Node `json:"nodes,omitempty"`
@@ -43,7 +35,6 @@ type ServiceGraphStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
 // ServiceGraph is the Schema for the servicegraphs API
 type ServiceGraph struct {
 	metav1.TypeMeta   `json:",inline"`

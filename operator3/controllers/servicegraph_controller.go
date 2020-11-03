@@ -56,9 +56,6 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 	// your logic here
 	servicegraph := &onlabv2.ServiceGraph{}
 	err := r.Get(ctx, req.NamespacedName, servicegraph)
-
-	// printServiceGraph(servicegraph)
-
 	if err != nil {
 		if errors.IsNotFound(err) {
 			// Request object not found, could have been deleted after reconcile request.
@@ -71,6 +68,7 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 		log.Error(err, "Failed to get ServiceGraph resource")
 		return ctrl.Result{}, err
 	}
+	// printServiceGraph(servicegraph)
 
 	for _, node := range servicegraph.Spec.Nodes {
 		// Check if the deployment for the node already exists, if not create a new one
@@ -107,10 +105,20 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 			// Spec updated - return and requeue
 			return ctrl.Result{Requeue: true}, nil
 		}
+	}
 
+	// Update/create services
+	for _, node := range servicegraph.Spec.Nodes {
 		svc := r.serviceForNode(node, servicegraph)
-		_ = r.Create(ctx, svc)
-
+		// Yes. This is not awesome, but works
+		_ = r.Delete(ctx, svc)
+		err = r.Create(ctx, svc)
+		if err != nil {
+			log.Error(err, "Failed to create new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
+			return ctrl.Result{}, err
+		}
+		// Deployment created successfully - return and requeue
+		return ctrl.Result{Requeue: true}, nil
 	}
 
 	return ctrl.Result{}, nil
