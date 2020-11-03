@@ -44,14 +44,20 @@ spec:
                   endpoints:
                     description: Setup and configure endpoints to node
                     items:
-                      description: Endpoint structure and behaviour
+                      description: Endpoint structure and behavior
                       properties:
                         callouts:
-                          description: 'Regex for pattern eg: db-user:890/read?from=table#site
-                            __+kubebuilder:validation:Pattern="[a-z-]*:[0-9]*/[a-z?=#]*"
-                            Ask further services'
+                          description: Ask further services
                           items:
-                            type: string
+                            description: CallOut structure contains additional information
+                              to each call out
+                            properties:
+                              url:
+                                description: 'Regex for pattern eg: db-user:890/read?from=table#site
+                                  Url to request'
+                                pattern: '[a-z-]*:[0-9]*/[a-z?=#]*'
+                                type: string
+                            type: object
                           type: array
                         cpuLoad:
                           description: CPU usage until request

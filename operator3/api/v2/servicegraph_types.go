@@ -66,7 +66,7 @@ func init() {
 	SchemeBuilder.Register(&ServiceGraph{}, &ServiceGraphList{})
 }
 
-// Here come my structs
+// Here come my structures
 
 // Node struct. Contains specification of a node
 type Node struct {
@@ -113,7 +113,7 @@ type Resource struct {
 	CPU uint `json:"cpu"`
 }
 
-// Endpoint structure and behaviour
+// Endpoint structure and behavior
 type Endpoint struct {
 
 	// +kubebuilder:validation:Required
@@ -136,8 +136,15 @@ type Endpoint struct {
 	Delay uint `json:"delay"`
 
 	// +kubebuilder:validation:Optional
-	// Regex for pattern eg: db-user:890/read?from=table#site
-	// __+kubebuilder:validation:Pattern="[a-z-]*:[0-9]*/[a-z?=#]*"
 	// Ask further services
-	CallOuts []string `json:"callouts,omitempty"`
+	CallOuts []CallOut `json:"callouts,omitempty"`
+}
+
+// CallOut structure contains additional information to each call out
+type CallOut struct {
+	// Regex for pattern eg: db-user:890/read?from=table#site
+	// +kubebuilder:validation:Pattern="[a-z-]*:[0-9]*/[a-z?=#]*"
+	// +kubebuilder:validation:Required
+	// Url to request
+	URL string `json:"url,omitempty"`
 }

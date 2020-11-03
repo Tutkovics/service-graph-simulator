@@ -2,13 +2,14 @@ apiVersion: onlab.project.msc/v2
 kind: ServiceGraph
 metadata:
   name: servicegraph-sample
+  namespace: default
 spec:
   # Add fields here
   name: bar
   size: 2
   nodes:
     - name: front-end
-      replicas: 1
+      replicas: 3
       port: 80
       nodePort: 30000
       resources:
@@ -22,13 +23,13 @@ spec:
           cpuLoad: 200
           delay: 20
           callouts:
-            - back-end:80/profile
+            - url: back-end:80/profile
         - path: /iterate
           cpuLoad: 300
           delay: 30
           callouts:
-            - back-end:80/profile
-            - monitor:80/index
+            - url: back-end:80/profile
+            - url: monitor:80/index
 
     - name: back-end
       replicas: 3
@@ -41,12 +42,12 @@ spec:
           cpuLoad: 100
           delay: 10
           callouts:
-            - db:80/get
+            - url: db:80/get
         - path: /create
           cpuLoad: 200
           delay: 20
           callouts:
-            - db:80/set
+            - url: db:80/set
 
     - name: db
       replicas: 1
