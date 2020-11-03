@@ -20,6 +20,7 @@ import (
 	// Basic go libraries
 	"context"
 	"fmt"
+	"strings"
 
 	// Manual imports
 	appsv1 "k8s.io/api/apps/v1"
@@ -107,6 +108,9 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 			return ctrl.Result{Requeue: true}, nil
 		}
 
+		svc := r.serviceForNode(node, servicegraph)
+		_ = r.Create(ctx, svc)
+
 	}
 
 	return ctrl.Result{}, nil
@@ -115,6 +119,8 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 func (r *ServiceGraphReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&onlabv2.ServiceGraph{}).
+		Owns(&appsv1.Deployment{}).
+		Owns(&corev1.Service{}).
 		Complete(r)
 }
 
@@ -142,6 +148,7 @@ func printServiceGraph(servicegraph *onlabv2.ServiceGraph) {
 func (r *ServiceGraphReconciler) deploymentForNode(node *onlabv2.Node, sg *onlabv2.ServiceGraph) *appsv1.Deployment {
 	ls := r.labelsForNode(node)
 	replicas := int32(node.Replicas)
+	args := r.createCommandForNode(node)
 
 	dep := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -161,7 +168,7 @@ func (r *ServiceGraphReconciler) deploymentForNode(node *onlabv2.Node, sg *onlab
 					Containers: []corev1.Container{{
 						Image:   "tuti/service-graph-simulator:latest",
 						Name:    "servicenode",
-						Command: []string{"/app/main", "-name=Backend", "-delay=90", "-port=9999", "-cpu=90", "-memory=900"}, //"-m=64", "-o", "modern", "-v"},
+						Command: args,
 						Ports: []corev1.ContainerPort{{
 							ContainerPort: int32(node.ContainerPort),
 							Name:          "listen",
@@ -182,4 +189,72 @@ func (r *ServiceGraphReconciler) deploymentForNode(node *onlabv2.Node, sg *onlab
 // labelsForNode returns the labels for selecting the resources
 func (r *ServiceGraphReconciler) labelsForNode(node *onlabv2.Node) map[string]string {
 	return map[string]string{"app": "servicegraph", "node": node.Name}
+}
+
+func (r *ServiceGraphReconciler) serviceForNode(node *onlabv2.Node, sg *onlabv2.ServiceGraph) *corev1.Service {
+	ls := r.labelsForNode(node)
+	cPort := int32(node.ContainerPort)
+	nPort := int32(node.NodePort)
+	sType := corev1.ServiceTypeClusterIP
+
+	if nPort != 0 {
+		sType = corev1.ServiceTypeNodePort
+	}
+
+	port := []corev1.ServicePort{
+		corev1.ServicePort{
+			Port:     cPort,
+			NodePort: nPort,
+		},
+	}
+
+	service := &corev1.Service{
+		TypeMeta: metav1.TypeMeta{
+			Kind:       "Service",
+			APIVersion: "v1",
+		},
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      node.Name,
+			Namespace: "default",
+		},
+		Spec: corev1.ServiceSpec{
+			Selector: ls,
+			Ports:    port,
+			Type:     sType,
+		},
+	}
+
+	fmt.Printf("\nSERVICE #### Nodeport: %d ######\n%+v\n", node.NodePort, service)
+
+	return service
+}
+
+func (r *ServiceGraphReconciler) createCommandForNode(node *onlabv2.Node) []string {
+	// eg: -name Backend -delay 90 -port 9999 -cpu 90 -memory 900 -endpoint-url /read -endpoint-cpu 99 -endpoint-delay 192 -endpoint-url /index -endpoint-cpu 22 -endpoint-delay 111 -endpoint-call='"back-end:9898/staus__front-end:9876/health"' -endpoint-call "database:1234/asd?q=user1"
+	var cmd []string
+
+	cmd = append(cmd, "/app/main") //start my application
+
+	// application parameters
+	cmd = append(cmd, fmt.Sprintf("-name='%s'", node.Name))
+	cmd = append(cmd, fmt.Sprintf("-port=%d", node.ContainerPort))
+	cmd = append(cmd, fmt.Sprintf("-cpu=%d", node.Resources.CPU))
+	cmd = append(cmd, fmt.Sprintf("-memory=%d", node.Resources.Memory))
+
+	for _, ep := range node.Endpoints {
+		// convert list of callouts to "call-out1__call-out2..." format
+		var tmpArray []string
+		for _, ca := range ep.CallOuts {
+			tmpArray = append(tmpArray, string(ca.URL))
+		}
+		callOutParsed := strings.Join(tmpArray, "__")
+
+		cmd = append(cmd, fmt.Sprintf("-endpoint-url='%s'", ep.Path))
+		cmd = append(cmd, fmt.Sprintf("-endpoint-delay=%d", ep.Delay))
+		cmd = append(cmd, fmt.Sprintf("-endpoint-call='%s'", callOutParsed))
+		cmd = append(cmd, fmt.Sprintf("-endpoint-cpu=%d", ep.CPULoad))
+	}
+
+	fmt.Printf("Command to run in container: %s", cmd)
+	return cmd
 }
