@@ -5,7 +5,7 @@ metadata:
   name: servicegraph-viewer-role
 rules:
 - apiGroups:
-  - onlab.my.domain
+  - onlab.project.msc
   resources:
   - servicegraphs
   verbs:
@@ -13,7 +13,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - onlab.my.domain
+  - onlab.project.msc
   resources:
   - servicegraphs/status
   verbs:

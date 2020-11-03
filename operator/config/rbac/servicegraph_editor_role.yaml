@@ -5,7 +5,7 @@ metadata:
   name: servicegraph-editor-role
 rules:
 - apiGroups:
-  - onlab.my.domain
+  - onlab.project.msc
   resources:
   - servicegraphs
   verbs:
@@ -17,7 +17,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - onlab.my.domain
+  - onlab.project.msc
   resources:
   - servicegraphs/status
   verbs:

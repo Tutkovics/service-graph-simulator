@@ -1,7 +1,0 @@
-apiVersion: onlab.example.com/v1
-kind: Servicegraph
-metadata:
-  name: servicegraph-sample
-spec:
-  # Add fields here
-  foo: bar
