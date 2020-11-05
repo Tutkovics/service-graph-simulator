@@ -87,7 +87,7 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 				return ctrl.Result{}, err
 			}
 			// Deployment created successfully - return and requeue
-			return ctrl.Result{Requeue: true}, nil
+			return ctrl.Result{Requeue: false}, nil
 		} else if err != nil {
 			log.Error(err, "Failed to get Deployment")
 			return ctrl.Result{}, err
@@ -103,22 +103,32 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 				return ctrl.Result{}, err
 			}
 			// Spec updated - return and requeue
-			return ctrl.Result{Requeue: true}, nil
+			return ctrl.Result{Requeue: false}, nil
 		}
-	}
 
-	// Update/create services
-	for _, node := range servicegraph.Spec.Nodes {
-		svc := r.serviceForNode(node, servicegraph)
-		// Yes. This is not awesome, but works
-		_ = r.Delete(ctx, svc)
-		err = r.Create(ctx, svc)
-		if err != nil {
-			log.Error(err, "Failed to create new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
+		// Update/create services
+
+		foundSvc := &corev1.Service{}
+
+		err = r.Get(ctx, client.ObjectKey{Namespace: "default", Name: "name"}, foundSvc)
+
+		if err != nil && errors.IsNotFound(err) {
+			svc := r.serviceForNode(node, servicegraph)
+			log.Info("Creating a new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
+			// Yes. This is not awesome, but works
+			// 	_ = r.Delete(ctx, svc)
+			// err = r.Create(ctx, svc)
+			err = r.Create(ctx, svc)
+			if err != nil {
+				log.Error(err, "Failed to create new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
+				return ctrl.Result{}, err
+			}
+			// Deployment created successfully - return and requeue
+			return ctrl.Result{Requeue: false}, nil
+		} else if err != nil {
+			log.Error(err, "Failed to get SVC")
 			return ctrl.Result{}, err
 		}
-		// Deployment created successfully - return and requeue
-		return ctrl.Result{Requeue: true}, nil
 	}
 
 	return ctrl.Result{}, nil
@@ -189,7 +199,7 @@ func (r *ServiceGraphReconciler) deploymentForNode(node *onlabv2.Node, sg *onlab
 
 	fmt.Printf("Created Deployment: %+v", dep)
 
-	// Set Memcached instance as the owner and controller
+	// Set deployment instance as the owner and controller
 	ctrl.SetControllerReference(sg, dep, r.Scheme)
 	return dep
 }
@@ -233,6 +243,9 @@ func (r *ServiceGraphReconciler) serviceForNode(node *onlabv2.Node, sg *onlabv2.
 	}
 
 	fmt.Printf("\nSERVICE #### Nodeport: %d ######\n%+v\n", node.NodePort, service)
+
+	// Set Service instance as the owner and controller
+	ctrl.SetControllerReference(sg, service, r.Scheme)
 
 	return service
 }

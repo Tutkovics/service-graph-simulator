@@ -11,7 +11,7 @@ spec:
     - name: front-end
       replicas: 1
       port: 80
-      #nodePort: 30000
+      nodePort: 30000
       resources:
         memory: 1000
         cpu: 100
@@ -66,13 +66,14 @@ spec:
     - name: monitor
       replicas: 1
       port: 70
-      nodePort: 30001
+      #nodePort: 30001
       resources:
         memory: 1000
         cpu: 100
       endpoints:
-        - path: /index
+        - path: '/index'
           cpuLoad: 100
           delay: 10
+          
 
 

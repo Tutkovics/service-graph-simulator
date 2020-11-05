@@ -13,7 +13,7 @@ import (
 
 // example: main.go -name Frontend -delay 9 -port 9090 -cpu 90 -memory 900 -endpoint-url /read -endpoint-cpu 99 -endpoint-delay 98 -endpoint-url /index -endpoint-cpu 22 -endpoint-delay 202
 type config struct {
-	Name           string   `flag:"name a" desc:"Server/service name"`
+	Name           string   `flag:"name" desc:"Server/service name"`
 	InitDelay      uint     `flag:"delay" desc:"Delay after start up [ms]"`
 	Port           uint     `flag:"port" desc:"Open port to listen"`
 	CPUusage       uint     `flag:"cpu" desc:"CPU usage in idle time [mCPU]"`
@@ -59,16 +59,12 @@ func readConfigParameters() *config {
 }
 
 func (c *config) check() bool {
-	// endpoint-call out?
-	//for i, e := range c.EndpointsCall {
-	//	fmt.Println(i, " --> ", e)
-	//}
-
 	if len(c.Endpoints) == len(c.EndpointsCPU) &&
 		len(c.Endpoints) == len(c.EndpointsDelay) &&
 		len(c.Endpoints) == len(c.EndpointsCall) {
 		return true
 	}
+
 	return false
 }
 
@@ -124,22 +120,23 @@ func main() {
 					fmt.Fprintf(w, "<li>RemoteAddr: %s</li>\n", r.RemoteAddr)
 					fmt.Fprintf(w, "<li>Host: %s</li>\n", r.Host)
 					fmt.Fprintln(w, "</ul>")
-
-					//foundEndpoint = true //set falg if the requested endpoint was found
 				}
 
 			}
-
-			//fmt.Fprintf(w, "<h1>/</h1>\n")
-			//body, _ := json.MarshalIndent(cfg, "", "    ")
-			//fmt.Fprintf(w, "<pre><code>Configuration: %s</pre></code>\n", string(body))
-
-			//if foundEndpoint == false {ű
 
 			// send response time
 			fmt.Fprintf(w, "\nResponse time: %s\n", time.Now().Sub(start))
 		})
 	}
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// log
+		fmt.Printf("[REQUEST-INCOME] '%s' --> '%s'\n", r.URL, r.URL.Path)
+		fmt.Printf("[MAIN]\t\tConfig values:\t%+v\n", cfg)
+		// response
+		fmt.Fprintf(w, "<h1>'/' or 404 page</h1>\n")
+	})
+
 	if err := http.ListenAndServe(addr, nil); err != nil {
 
 		log.Fatal(err)
