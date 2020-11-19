@@ -87,7 +87,7 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 				return ctrl.Result{}, err
 			}
 			// Deployment created successfully - return and requeue
-			return ctrl.Result{Requeue: false}, nil
+			return ctrl.Result{Requeue: true}, nil
 		} else if err != nil {
 			log.Error(err, "Failed to get Deployment")
 			return ctrl.Result{}, err
@@ -103,32 +103,46 @@ func (r *ServiceGraphReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error
 				return ctrl.Result{}, err
 			}
 			// Spec updated - return and requeue
-			return ctrl.Result{Requeue: false}, nil
+			return ctrl.Result{Requeue: true}, nil
 		}
 
-		// Update/create services
+		// // Update/create services
 
-		foundSvc := &corev1.Service{}
+		// foundSvc := &corev1.Service{}
 
-		err = r.Get(ctx, client.ObjectKey{Namespace: "default", Name: "name"}, foundSvc)
+		// err = r.Get(ctx, client.ObjectKey{Namespace: "default", Name: "name"}, foundSvc)
 
-		if err != nil && errors.IsNotFound(err) {
-			svc := r.serviceForNode(node, servicegraph)
-			log.Info("Creating a new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
-			// Yes. This is not awesome, but works
-			// 	_ = r.Delete(ctx, svc)
-			// err = r.Create(ctx, svc)
-			err = r.Create(ctx, svc)
-			if err != nil {
-				log.Error(err, "Failed to create new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
-				return ctrl.Result{}, err
-			}
-			// Deployment created successfully - return and requeue
-			return ctrl.Result{Requeue: false}, nil
-		} else if err != nil {
-			log.Error(err, "Failed to get SVC")
+		// if err != nil && errors.IsNotFound(err) {
+		// 	svc := r.serviceForNode(node, servicegraph)
+		// 	log.Info("Creating a new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
+		// 	// Yes. This is not awesome, but works
+		// 	// 	_ = r.Delete(ctx, svc)
+		// 	// err = r.Create(ctx, svc)
+		// 	err = r.Create(ctx, svc)
+		// 	if err != nil {
+		// 		log.Error(err, "Failed to create new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
+		// 		return ctrl.Result{}, err
+		// 	}
+		// 	// Deployment created successfully - return and requeue
+		// 	return ctrl.Result{Requeue: true}, nil
+		// } else if err != nil {
+		// 	log.Error(err, "Failed to get SVC")
+		// 	return ctrl.Result{}, err
+		// }
+	}
+
+	// Update/create services
+	for _, node := range servicegraph.Spec.Nodes {
+		svc := r.serviceForNode(node, servicegraph)
+		// Yes. This is not awesome, but works
+		//_ = r.Delete(ctx, svc)
+		err = r.Create(ctx, svc)
+		if err != nil {
+			log.Error(err, "Failed to create new Service", "Service.Namespace", svc.Namespace, "Service.Name", svc.Name)
 			return ctrl.Result{}, err
 		}
+		// Deployment created successfully - return and requeue
+		return ctrl.Result{Requeue: true}, nil
 	}
 
 	return ctrl.Result{}, nil
@@ -257,7 +271,7 @@ func (r *ServiceGraphReconciler) createCommandForNode(node *onlabv2.Node) []stri
 	cmd = append(cmd, "/app/main") //start my application
 
 	// application parameters
-	cmd = append(cmd, fmt.Sprintf("-name='%s'", node.Name))
+	cmd = append(cmd, fmt.Sprintf("-name=%s", node.Name))
 	cmd = append(cmd, fmt.Sprintf("-port=%d", node.ContainerPort))
 	cmd = append(cmd, fmt.Sprintf("-cpu=%d", node.Resources.CPU))
 	cmd = append(cmd, fmt.Sprintf("-memory=%d", node.Resources.Memory))
@@ -270,7 +284,7 @@ func (r *ServiceGraphReconciler) createCommandForNode(node *onlabv2.Node) []stri
 		}
 		callOutParsed := strings.Join(tmpArray, "__")
 
-		cmd = append(cmd, fmt.Sprintf("-endpoint-url='%s'", ep.Path))
+		cmd = append(cmd, fmt.Sprintf("-endpoint-url=%s", ep.Path))
 		cmd = append(cmd, fmt.Sprintf("-endpoint-delay=%d", ep.Delay))
 		cmd = append(cmd, fmt.Sprintf("-endpoint-call='%s'", callOutParsed))
 		cmd = append(cmd, fmt.Sprintf("-endpoint-cpu=%d", ep.CPULoad))

@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/octago/sflags/gen/gflag"
@@ -76,8 +77,8 @@ func main() {
 	var addr string = ":" + fmt.Sprint(cfg.Port)
 
 	// start webserver
-	for _, endpoint := range cfg.Endpoints {
-		// fmt.Printf("%d --> %s --> %d\n", i, endpoint, cfg.EndpointsCPU[i])
+	for i, endpoint := range cfg.Endpoints {
+		fmt.Printf("%d --> %s --> \n", i, endpoint)
 		http.HandleFunc(endpoint, func(w http.ResponseWriter, r *http.Request) {
 			fmt.Printf("[REQUEST-INCOME] %s --> %s\n", r.URL, r.URL.Path)
 			start := time.Now()
@@ -85,7 +86,8 @@ func main() {
 
 			for k, endp := range cfg.Endpoints {
 				if endp == r.URL.Path {
-					time.Sleep(time.Duration(cfg.EndpointsDelay[k]) * time.Millisecond)
+					// Sleep not relevant here
+					// time.Sleep(time.Duration(cfg.EndpointsDelay[k]) * time.Millisecond)
 					fmt.Printf("[REQUEST]\t%s\n", endp)
 					fmt.Fprintf(w, "<h1>Hello from: %s!</h1><hl>\n", cfg.Name)
 					fmt.Fprintln(w, "<h3>Config</h3><ul>")
@@ -113,7 +115,26 @@ func main() {
 					}
 					fmt.Fprintln(w, "</ul>")
 
-					fmt.Fprintln(w, "<h3>Info</h3><ul>")
+					// Generate CPU usage
+					// Create waitgroup to wait all calculations done
+					var waitgroup sync.WaitGroup
+					waitgroup.Add(int(cfg.EndpointsCPU[k]))
+					for i := 0; i < int(cfg.EndpointsCPU[k]); i++ {
+						go algo(600, &waitgroup)
+					}
+					waitgroup.Wait()
+
+					// After CPU calcualation wait if the delay time not passed
+					waitTime := (time.Duration(cfg.EndpointsDelay[k]) * time.Millisecond) - time.Now().Sub(start)
+
+					if waitTime > 0 {
+						time.Sleep(waitTime)
+					} else {
+						fmt.Fprintf(w, "<p>CPU calculation took more time than delay time (%s)</p>\n", waitTime)
+					}
+
+					// Give more information about request/response
+					fmt.Fprintf(w, "<h3>Info</h3>\n<ul>\n")
 					fmt.Fprintf(w, "<li>Time: %s</li>\n", time.Now())
 					fmt.Fprintf(w, "<li>Method: %s</li>\n", r.Method)
 					fmt.Fprintf(w, "<li>URL: %s</li>\n", r.URL)
@@ -133,12 +154,53 @@ func main() {
 		// log
 		fmt.Printf("[REQUEST-INCOME] '%s' --> '%s'\n", r.URL, r.URL.Path)
 		fmt.Printf("[MAIN]\t\tConfig values:\t%+v\n", cfg)
+		fmt.Printf("%+v", r)
 		// response
 		fmt.Fprintf(w, "<h1>'/' or 404 page</h1>\n")
+		fmt.Fprintf(w, "%+v", r)
 	})
 
 	if err := http.ListenAndServe(addr, nil); err != nil {
 
 		log.Fatal(err)
 	}
+
+}
+
+// Sieve of Eratosthenes
+func algo(number int, waitgroup *sync.WaitGroup) {
+	max := number
+	numbers := make([]bool, max+1)
+	// Set values to ture
+	for i := range numbers {
+		numbers[i] = true
+	}
+
+	// main algorithm
+	for p := 2; p*p <= max; p++ {
+		if numbers[p] {
+			for i := p * p; i <= max; i += p {
+
+				numbers[i] = false
+			}
+		}
+	}
+
+	// Print prime numbers
+	for p := 2; p <= max; p++ {
+		if numbers[p] {
+			fmt.Printf("%d ", p)
+		}
+	}
+
+	// count prime numbers to not spam output
+	// sum := 0
+	// for _, element := range numbers {
+	// 	if element {
+	// 		sum++
+	// 	}
+	// }
+	// fmt.Printf("Found primes: #%d ", sum)
+
+	waitgroup.Done()
 }

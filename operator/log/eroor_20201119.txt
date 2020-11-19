@@ -1,0 +1,435 @@
+
+Command to run in container: [/app/main -name=front-end -port=80 -cpu=100 -memory=1000 -endpoint-url=/instant -endpoint-delay=10 -endpoint-call='' -endpoint-cpu=100 -endpoint-url=/chain -endpoint-delay=20 -endpoint-call='back-end:80/profile' -endpoint-cpu=200 -endpoint-url=/iterate -endpoint-delay=30 -endpoint-call='back-end:80/profile__monitor:80/index' -endpoint-cpu=300]Created Deployment: &Deployment{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:DeploymentSpec{Replicas:*1,Selector:&v1.LabelSelector{MatchLabels:map[string]string{app: servicegraph,node: front-end,},MatchExpressions:[]LabelSelectorRequirement{},},Template:{{      0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[app:servicegraph node:front-end] map[] [] []  []} {[] [] [{servicenode tuti/service-graph-simulator:latest [/app/main -name=front-end -port=80 -cpu=100 -memory=1000 -endpoint-url=/instant -endpoint-delay=10 -endpoint-call='' -endpoint-cpu=100 -endpoint-url=/chain -endpoint-delay=20 -endpoint-call='back-end:80/profile' -endpoint-cpu=200 -endpoint-url=/iterate -endpoint-delay=30 -endpoint-call='back-end:80/profile__monitor:80/index' -endpoint-cpu=300] []  [{listen 0 80  }] [] [] {map[] map[]} [] [] nil nil nil nil    nil false false false}] []  <nil> <nil>  map[]   <nil>  false false false <nil> nil []   nil  [] []  <nil> nil [] <nil> <nil> <nil> map[] []}},Strategy:DeploymentStrategy{Type:,RollingUpdate:nil,},MinReadySeconds:0,RevisionHistoryLimit:nil,Paused:false,ProgressDeadlineSeconds:nil,},Status:DeploymentStatus{ObservedGeneration:0,Replicas:0,UpdatedReplicas:0,AvailableReplicas:0,UnavailableReplicas:0,Conditions:[]DeploymentCondition{},ReadyReplicas:0,CollisionCount:nil,},}2020-11-19T13:14:35.901+0100       INFO    controllers.ServiceGraph       Creating a new Deployment       {"servicegraph": "default/servicegraph-sample", "Deployment.Namespace": "default", "Deployment.Name": "front-end"}
+Command to run in container: [/app/main -name=back-end -port=80 -cpu=200 -memory=2000 -endpoint-url=/profile -endpoint-delay=10 -endpoint-call='db:80/get' -endpoint-cpu=100 -endpoint-url=/create -endpoint-delay=20 -endpoint-call='db:80/set' -endpoint-cpu=200]Created Deployment: &Deployment{ObjectMeta:{back-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:DeploymentSpec{Replicas:*3,Selector:&v1.LabelSelector{MatchLabels:map[string]string{app: servicegraph,node: back-end,},MatchExpressions:[]LabelSelectorRequirement{},},Template:{{      0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[app:servicegraph node:back-end] map[] [] []  []} {[] [] [{servicenode tuti/service-graph-simulator:latest [/app/main -name=back-end -port=80 -cpu=200 -memory=2000 -endpoint-url=/profile -endpoint-delay=10 -endpoint-call='db:80/get' -endpoint-cpu=100 -endpoint-url=/create -endpoint-delay=20 -endpoint-call='db:80/set' -endpoint-cpu=200] []  [{listen 0 80  }] [] [] {map[] map[]} [] [] nil nil nil nil    nil false false false}] []  <nil> <nil>  map[]   <nil>  false false false <nil> nil []   nil  [] []  <nil> nil [] <nil> <nil> <nil> map[] []}},Strategy:DeploymentStrategy{Type:,RollingUpdate:nil,},MinReadySeconds:0,RevisionHistoryLimit:nil,Paused:false,ProgressDeadlineSeconds:nil,},Status:DeploymentStatus{ObservedGeneration:0,Replicas:0,UpdatedReplicas:0,AvailableReplicas:0,UnavailableReplicas:0,Conditions:[]DeploymentCondition{},ReadyReplicas:0,CollisionCount:nil,},}2020-11-19T13:14:35.907+0100    INFO    controllers.ServiceGraph        Creating a new Deployment       {"servicegraph": "default/servicegraph-sample", "Deployment.Namespace": "default", "Deployment.Name": "back-end"}
+Command to run in container: [/app/main -name=db -port=36 -cpu=300 -memory=3000 -endpoint-url=/get -endpoint-delay=10 -endpoint-call='' -endpoint-cpu=100 -endpoint-url=/set -endpoint-delay=20 -endpoint-call='' -endpoint-cpu=200]Created Deployment: &Deployment{ObjectMeta:{db  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:DeploymentSpec{Replicas:*1,Selector:&v1.LabelSelector{MatchLabels:map[string]string{app: servicegraph,node: db,},MatchExpressions:[]LabelSelectorRequirement{},},Template:{{      0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[app:servicegraph node:db] map[] [] []  []} {[] [] [{servicenode tuti/service-graph-simulator:latest [/app/main -name=db -port=36 -cpu=300 -memory=3000 -endpoint-url=/get -endpoint-delay=10 -endpoint-call='' -endpoint-cpu=100 -endpoint-url=/set -endpoint-delay=20 -endpoint-call='' -endpoint-cpu=200] []  [{listen 0 36  }] [] [] {map[] map[]} [] [] nil nil nil nil    nil false false false}] []  <nil> <nil>  map[]   <nil>  false false false <nil> nil []   nil  [] []  <nil> nil [] <nil> <nil> <nil> map[] []}},Strategy:DeploymentStrategy{Type:,RollingUpdate:nil,},MinReadySeconds:0,RevisionHistoryLimit:nil,Paused:false,ProgressDeadlineSeconds:nil,},Status:DeploymentStatus{ObservedGeneration:0,Replicas:0,UpdatedReplicas:0,AvailableReplicas:0,UnavailableReplicas:0,Conditions:[]DeploymentCondition{},ReadyReplicas:0,CollisionCount:nil,},}2020-11-19T13:14:35.911+0100     INFO    controllers.ServiceGraph        Creating a new Deployment      {"servicegraph": "default/servicegraph-sample", "Deployment.Namespace": "default", "Deployment.Name": "db"}
+Command to run in container: [/app/main -name=monitor -port=70 -cpu=100 -memory=1000 -endpoint-url=/index -endpoint-delay=10 -endpoint-call='' -endpoint-cpu=100]Created Deployment: &Deployment{ObjectMeta:{monitor  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:DeploymentSpec{Replicas:*1,Selector:&v1.LabelSelector{MatchLabels:map[string]string{app: servicegraph,node: monitor,},MatchExpressions:[]LabelSelectorRequirement{},},Template:{{      0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[app:servicegraph node:monitor] map[] [] []  []} {[] [] [{servicenode tuti/service-graph-simulator:latest [/app/main -name=monitor -port=70 -cpu=100 -memory=1000 -endpoint-url=/index -endpoint-delay=10 -endpoint-call='' -endpoint-cpu=100] []  [{listen 0 70  }] [] [] {map[] map[]} [] [] nil nil nil nil    nil false false false}] []  <nil> <nil>  map[]   <nil>  false false false <nil> nil []   nil  [] []  <nil> nil [] <nil> <nil> <nil> map[] []}},Strategy:DeploymentStrategy{Type:,RollingUpdate:nil,},MinReadySeconds:0,RevisionHistoryLimit:nil,Paused:false,ProgressDeadlineSeconds:nil,},Status:DeploymentStatus{ObservedGeneration:0,Replicas:0,UpdatedReplicas:0,AvailableReplicas:0,UnavailableReplicas:0,Conditions:[]DeploymentCondition{},ReadyReplicas:0,CollisionCount:nil,},}2020-11-19T13:14:35.920+0100     INFO    controllers.ServiceGraph        Creating a new Deployment       {"servicegraph": "default/servicegraph-sample", "Deployment.Namespace": "default", "Deployment.Name": "monitor"}
+Command to run in container: [/app/main -name=monitor -port=70 -cpu=100 -memory=1000 -endpoint-url=/index -endpoint-delay=10 -endpoint-call='' -endpoint-cpu=100]Created Deployment: &Deployment{ObjectMeta:{monitor  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:DeploymentSpec{Replicas:*1,Selector:&v1.LabelSelector{MatchLabels:map[string]string{app: servicegraph,node: monitor,},MatchExpressions:[]LabelSelectorRequirement{},},Template:{{      0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[app:servicegraph node:monitor] map[] [] []  []} {[] [] [{servicenode tuti/service-graph-simulator:latest [/app/main -name=monitor -port=70 -cpu=100 -memory=1000 -endpoint-url=/index -endpoint-delay=10 -endpoint-call='' -endpoint-cpu=100] []  [{listen 0 70  }] [] [] {map[] map[]} [] [] nil nil nil nil    nil false false false}] []  <nil> <nil>  map[]   <nil>  false false false <nil> nil []   nil  [] []  <nil> nil [] <nil> <nil> <nil> map[] []}},Strategy:DeploymentStrategy{Type:,RollingUpdate:nil,},MinReadySeconds:0,RevisionHistoryLimit:nil,Paused:false,ProgressDeadlineSeconds:nil,},Status:DeploymentStatus{ObservedGeneration:0,Replicas:0,UpdatedReplicas:0,AvailableReplicas:0,UnavailableReplicas:0,Conditions:[]DeploymentCondition{},ReadyReplicas:0,CollisionCount:nil,},}2020-11-19T13:14:35.928+0100     INFO    controllers.ServiceGraph        Creating a new Deployment       {"servicegraph": "default/servicegraph-sample", "Deployment.Namespace": "default", "Deployment.Name": "monitor"}
+2020-11-19T13:14:35.934+0100    ERROR   controllers.ServiceGraph        Failed to create new Deployment        {"servicegraph": "default/servicegraph-sample", "Deployment.Namespace": "default", "Deployment.Name": "monitor", "error": "deployments.apps \"monitor\" already exists"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:86
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:35.935+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "deployments.apps \"monitor\" already exists"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:37.173+0100    ERROR   controllers.ServiceGraph        Failed to create new Service   {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:37.173+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:38.358+0100    ERROR   controllers.ServiceGraph        Failed to create new Service   {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:38.358+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:39.484+0100    ERROR   controllers.ServiceGraph        Failed to create new Service   {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:39.484+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:40.788+0100    ERROR   controllers.ServiceGraph        Failed to create new Service   {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:40.788+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:42.396+0100    ERROR   controllers.ServiceGraph        Failed to create new Service  {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:42.396+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:43.430+0100    ERROR   controllers.ServiceGraph        Failed to create new Service  {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:43.430+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:44.475+0100    ERROR   controllers.ServiceGraph        Failed to create new Service  {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:44.475+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:46.533+0100    ERROR   controllers.ServiceGraph        Failed to create new Service  {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:46.534+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+^[[A
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:48.670+0100    ERROR   controllers.ServiceGraph        Failed to create new Service  {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:48.670+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+
+SERVICE #### Nodeport: 30000 ######
+&Service{ObjectMeta:{front-end  default    0 0001-01-01 00:00:00 +0000 UTC <nil> <nil> map[] map[] [] []  []},Spec:ServiceSpec{Ports:[]ServicePort{ServicePort{Name:,Protocol:,Port:80,TargetPort:{0 0 },NodePort:30000,AppProtocol:nil,},},Selector:map[string]string{app: servicegraph,node: front-end,},ClusterIP:,Type:NodePort,ExternalIPs:[],SessionAffinity:,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,IPFamily:nil,TopologyKeys:[],},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[]LoadBalancerIngress{},},},}
+2020-11-19T13:14:49.714+0100    ERROR   controllers.ServiceGraph        Failed to create new Service  {"servicegraph": "default/servicegraph-sample", "Service.Namespace": "default", "Service.Name": "front-end", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+project.msc/m/v2/controllers.(*ServiceGraphReconciler).Reconcile
+        /home/tutkovics/go/src/github.com/Tutkovics/service-graph-simulator/operator/controllers/servicegraph_controller.go:141
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:235
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
+2020-11-19T13:14:49.714+0100    ERROR   controller      Reconciler error        {"reconcilerGroup": "onlab.project.msc", "reconcilerKind": "ServiceGraph", "controller": "servicegraph", "name": "servicegraph-sample", "namespace": "default", "error": "Service \"front-end\" is invalid: spec.ports[0].nodePort: Invalid value: 30000: provided port is already allocated"}
+github.com/go-logr/zapr.(*zapLogger).Error
+        /home/tutkovics/go/pkg/mod/github.com/go-logr/zapr@v0.1.0/zapr.go:128
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:237
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:209
+sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).worker
+        /home/tutkovics/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.6.2/pkg/internal/controller/controller.go:188
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:155
+k8s.io/apimachinery/pkg/util/wait.BackoffUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:156
+k8s.io/apimachinery/pkg/util/wait.JitterUntil
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:133
+k8s.io/apimachinery/pkg/util/wait.Until
+        /home/tutkovics/go/pkg/mod/k8s.io/apimachinery@v0.18.6/pkg/util/wait/wait.go:90
